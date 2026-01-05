@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Opening Payment App...</title>
+    <script>
+        window.onload = function() {
+            // 1. Get UPI ID and Amount from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const pa = urlParams.get('pa'); 
+            const am = urlParams.get('am'); 
+            const pn = urlParams.get('pn') || "Merchant"; 
+
+            if (pa && am) {
+                // 2. Create the UPI Deep Link
+                const upiLink = `upi://pay?pa=${pa}&am=${am}&pn=${pn}&cu=INR`;
+                
+                // 3. Try to jump to the app immediately
+                window.location.href = upiLink;
+
+                // 4. Fallback if the jump doesn't work (for older browsers)
+                setTimeout(() => {
+                    document.body.innerHTML = `<h3>Click below to pay Rs. ${am}</h3>
+                    <a href="${upiLink}" style="padding:15px; background:blue; color:white; text-decoration:none; border-radius:5px;">Pay Now</a>`;
+                }, 500);
+            } else {
+                document.body.innerHTML = "<h3>Invalid Payment Link</h3>";
+            }
+        };
+    </script>
+</head>
+<body style="text-align:center; font-family:sans-serif; padding-top:50px;">
+    <h2>Processing Payment...</h2>
+</body>
+</html>
